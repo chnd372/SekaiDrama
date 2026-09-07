@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
   try {
     const cursor = req.nextUrl.searchParams.get("cursor") || "1";
 
-    const res = await fetch(`${UPSTREAM_API}/pinedrama/foryou?cursor=${encodeURIComponent(cursor)}`, {
+    const res = await cachedFetch("pinedrama/foryou/route.ts", `${UPSTREAM_API}/pinedrama/foryou?cursor=${encodeURIComponent(cursor)}`, {
       headers: {
         "User-Agent": "okhttp/4.12.0",
       },

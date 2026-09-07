@@ -1,3 +1,4 @@
+import { cachedFetch } from "@/lib/upstream-cache";
 
 import { type NextRequest } from "next/server";
 import { encryptedResponse, safeJson } from "@/lib/api-utils";
