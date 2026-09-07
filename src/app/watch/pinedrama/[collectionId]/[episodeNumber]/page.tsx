@@ -39,10 +39,12 @@ export default function PineDramaWatchPage() {
   const { data: episodeData, isLoading: episodeLoading } = usePineDramaEpisode(collectionId, currentEpisode);
 
   // Determine video URL: best_url first, fallback to indo_hd_cdn_urls
-  const videoUrl = episodeData?.best_url
+  const rawVideoUrl = episodeData?.best_url
     || episodeData?.main?.indo_hd_cdn_urls?.[0]
     || episodeData?.main?.indo_cdn_urls?.[0]
     || "";
+
+  const videoUrl = rawVideoUrl ? `/api/proxy/video?url=${encodeURIComponent(rawVideoUrl)}` : "";
 
   // Reset video state on episode change
   useEffect(() => {

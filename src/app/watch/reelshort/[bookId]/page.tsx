@@ -124,14 +124,20 @@ export default function ReelShortWatchPage() {
   const getCurrentVideoUrl = useCallback(() => {
     if (!episodeData?.videoList?.length) return null;
     
+    let targetVideo = episodeData.videoList[0];
     if (selectedQuality === "auto" || !qualityOptions.length) {
-      // Default: prefer H264 for compatibility
       const h264Video = episodeData.videoList.find(v => v.encode === "H264");
-      return h264Video || episodeData.videoList[0];
+      targetVideo = h264Video || episodeData.videoList[0];
+    } else {
+      const selected = qualityOptions.find(q => q.id === selectedQuality);
+      targetVideo = selected?.video || episodeData.videoList[0];
     }
+
+    if (!targetVideo?.url) return null;
     
-    const selected = qualityOptions.find(q => q.id === selectedQuality);
-    return selected?.video || episodeData.videoList[0];
+    // Proxy through /api/proxy/video to prevent CORS/Host whitelist issues
+    const proxiedUrl = `/api/proxy/video?url=${encodeURIComponent(targetVideo.url)}`;
+    return { ...targetVideo, url: proxiedUrl };
   }, [episodeData, selectedQuality, qualityOptions]);
 
   // Load video source
