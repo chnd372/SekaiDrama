@@ -1,13 +1,12 @@
 import { safeJson, encryptedResponse } from "@/lib/api-utils";
+import { cachedFetch } from "@/lib/upstream-cache";
 import { optimizeCover } from "@/lib/image-utils";
 
 const UPSTREAM_API = (process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.sansekai.my.id/api") + "/shortmax";
 
 export async function GET() {
   try {
-    const response = await fetch(`${UPSTREAM_API}/latest`, {
-      cache: 'no-store',
-    });
+    const response = await cachedFetch("shortmax/latest/route.ts", `${UPSTREAM_API}/latest`);
 
     if (!response.ok) {
       return encryptedResponse({ success: false, data: [] });

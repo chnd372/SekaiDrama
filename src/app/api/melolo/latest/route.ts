@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 export async function GET(request: NextRequest) {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.sansekai.my.id/api";
-    const response = await fetch(`${baseUrl}/melolo/latest`, { cache: "no-store" });
+    const response = await cachedFetch("melolo/latest/route.ts", `${baseUrl}/melolo/latest`);
     
     if (!response.ok) {
       return encryptedResponse({ books: [], code: response.status });

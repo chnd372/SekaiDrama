@@ -1,4 +1,5 @@
 import { safeJson, encryptedResponse } from "@/lib/api-utils";
+import { cachedFetch } from "@/lib/upstream-cache";
 import { NextRequest } from "next/server";
 
 const UPSTREAM_API = (process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.sansekai.my.id/api") + "/netshort";
@@ -16,10 +17,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const response = await fetch(
-      `${UPSTREAM_API}/episode?shortPlayId=${shortPlayId}&episodeNumber=${episodeNumber}`,
-      { cache: 'no-store' }
-    );
+    const response = await cachedFetch("netshort/episode/route.ts", `${UPSTREAM_API}/episode?shortPlayId=${shortPlayId}&episodeNumber=${episodeNumber}`);
 
     if (!response.ok) {
       return encryptedResponse(
