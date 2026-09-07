@@ -1,4 +1,3 @@
-import { cachedFetch } from "@/lib/upstream-cache";
 import { NextRequest, NextResponse } from "next/server";
 
 const UPSTREAM_API = process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.sansekai.my.id/api";
@@ -13,7 +12,7 @@ export async function GET(req: NextRequest) {
 
     const targetUrl = `${UPSTREAM_API}/goodshort/decrypt-stream?url=${encodeURIComponent(url)}`;
 
-    const res = await cachedFetch("src/app/api/goodshort/stream-proxy/route.ts", targetUrl, {
+    const res = await fetch(targetUrl, {
       headers: {
         "User-Agent": "okhttp/4.12.0",
       },
