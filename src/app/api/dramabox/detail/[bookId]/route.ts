@@ -1,4 +1,5 @@
 import { safeJson, encryptedResponse } from "@/lib/api-utils";
+import { cachedFetch } from "@/lib/upstream-cache";
 import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
 
@@ -16,7 +17,7 @@ export async function GET(
 
   // If API fetch -> proxy to upstream
   try {
-    const response = await fetch(`${UPSTREAM_API}/detail?bookId=${bookId}`, {
+    const response = await cachedFetch("src/app/api/dramabox/detail/[bookId]/route.ts", `${UPSTREAM_API}/detail?bookId=${bookId}`, {
       cache: 'no-store',
     });
 

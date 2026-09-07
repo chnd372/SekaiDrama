@@ -1,4 +1,5 @@
 import { safeJson, encryptedResponse } from "@/lib/api-utils";
+import { cachedFetch } from "@/lib/upstream-cache";
 import { NextRequest, NextResponse } from "next/server";
 
 const UPSTREAM_API = (process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.sansekai.my.id/api") + "/netshort";
@@ -16,7 +17,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Updated: use /detail endpoint instead of /allepisode (API update 2026-09)
-    const response = await fetch(`${UPSTREAM_API}/detail?shortPlayId=${shortPlayId}`, {
+    const response = await cachedFetch("src/app/api/netshort/detail/route.ts", `${UPSTREAM_API}/detail?shortPlayId=${shortPlayId}`, {
       cache: 'no-store',
     });
 

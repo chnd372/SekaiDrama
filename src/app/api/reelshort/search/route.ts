@@ -1,4 +1,5 @@
 import { safeJson, encryptedResponse } from "@/lib/api-utils";
+import { cachedFetch } from "@/lib/upstream-cache";
 import { NextRequest, NextResponse } from "next/server";
 
 const UPSTREAM_API = (process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.sansekai.my.id/api") + "/reelshort";
@@ -13,7 +14,7 @@ export async function GET(request: NextRequest) {
       return encryptedResponse({ success: true, data: [] });
     }
 
-    const response = await fetch(
+    const response = await cachedFetch("src/app/api/reelshort/search/route.ts", 
       `${UPSTREAM_API}/search?query=${encodeURIComponent(query)}&page=${page}`,
       {
         cache: 'no-store',

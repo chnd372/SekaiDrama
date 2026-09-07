@@ -1,4 +1,5 @@
 import { encryptedResponse } from "@/lib/api-utils";
+import { cachedFetch } from "@/lib/upstream-cache";
 import { NextResponse } from "next/server";
 
 const UPSTREAM_API = process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.sansekai.my.id/api";
@@ -13,7 +14,7 @@ export async function GET(request: Request) {
     targetUrl.searchParams.set("query", query);
     targetUrl.searchParams.set("page", page);
 
-    const res = await fetch(targetUrl.toString(), {
+    const res = await cachedFetch("src/app/api/dramanova/search/route.ts", targetUrl.toString(), {
       headers: {
         "User-Agent": "okhttp/4.12.0",
       },

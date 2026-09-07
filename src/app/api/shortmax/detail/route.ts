@@ -1,4 +1,5 @@
 import { safeJson, encryptedResponse } from "@/lib/api-utils";
+import { cachedFetch } from "@/lib/upstream-cache";
 import { optimizeCover } from "@/lib/image-utils";
 import { NextRequest } from "next/server";
 
@@ -16,7 +17,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const response = await fetch(`${UPSTREAM_API}/detail?shortPlayId=${shortPlayId}`, {
+    const response = await cachedFetch("src/app/api/shortmax/detail/route.ts", `${UPSTREAM_API}/detail?shortPlayId=${shortPlayId}`, {
       cache: 'no-store',
     });
 

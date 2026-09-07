@@ -1,11 +1,12 @@
 import { safeJson, encryptedResponse } from "@/lib/api-utils";
+import { cachedFetch } from "@/lib/upstream-cache";
 import { NextResponse } from "next/server";
 
 const UPSTREAM_API = (process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.sansekai.my.id/api") + "/netshort";
 
 export async function GET() {
   try {
-    const response = await fetch(`${UPSTREAM_API}/theaters`, {
+    const response = await cachedFetch("src/app/api/netshort/theaters/route.ts", `${UPSTREAM_API}/theaters`, {
       cache: 'no-store',
     });
 

@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { encryptedResponse } from "@/lib/api-utils";
+import { cachedFetch } from "@/lib/upstream-cache";
 
 const UPSTREAM_API = process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.sansekai.my.id/api";
 
@@ -11,7 +12,7 @@ export async function GET(req: NextRequest) {
       return encryptedResponse({ results: [] });
     }
 
-    const res = await fetch(
+    const res = await cachedFetch("src/app/api/pinedrama/search/route.ts", 
       `${UPSTREAM_API}/pinedrama/search?query=${encodeURIComponent(query)}`,
       {
         headers: {

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { safeJson, encryptedResponse } from "@/lib/api-utils";
+import { cachedFetch } from "@/lib/upstream-cache";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -10,7 +11,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.sansekai.my.id/api"}/freereels/detailAndAllEpisode?key=${id}`, {
+    const res = await cachedFetch("src/app/api/freereels/detail/route.ts", `${process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.sansekai.my.id/api"}/freereels/detailAndAllEpisode?key=${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

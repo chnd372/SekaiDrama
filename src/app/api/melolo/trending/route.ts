@@ -1,6 +1,7 @@
 
 import { type NextRequest } from "next/server";
 import { encryptedResponse, safeJson } from "@/lib/api-utils";
+import { cachedFetch } from "@/lib/upstream-cache";
 import { extractMeloloBooks } from "../utils";
 
 export const dynamic = "force-dynamic";
@@ -8,7 +9,7 @@ export const dynamic = "force-dynamic";
 export async function GET(request: NextRequest) {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.sansekai.my.id/api";
-    const response = await fetch(`${baseUrl}/melolo/trending`, { cache: "no-store" });
+    const response = await cachedFetch("src/app/api/melolo/trending/route.ts", `${baseUrl}/melolo/trending`, { cache: "no-store" });
     
     if (!response.ok) {
       return encryptedResponse({ books: [], code: response.status });

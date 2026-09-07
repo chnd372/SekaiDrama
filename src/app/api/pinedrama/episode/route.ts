@@ -1,4 +1,5 @@
 import { encryptedResponse } from "@/lib/api-utils";
+import { cachedFetch } from "@/lib/upstream-cache";
 
 const UPSTREAM_API = process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.sansekai.my.id/api";
 
@@ -19,7 +20,7 @@ export async function GET(request: Request) {
     targetUrl.searchParams.set("collection_id", collectionId);
     targetUrl.searchParams.set("episodeNumber", episodeNumber);
 
-    const res = await fetch(targetUrl.toString(), {
+    const res = await cachedFetch("src/app/api/pinedrama/episode/route.ts", targetUrl.toString(), {
       headers: {
         "User-Agent": "okhttp/4.12.0",
       },
