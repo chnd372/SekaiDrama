@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: "Failed to fetch data" }, { status: 500 });
     }
 
-    const data = await safeJson(res);
+    const data = await res.json();
     return encryptedResponse(data);
   } catch (error) {
     return NextResponse.json({ error: "Failed to fetch data" }, { status: 500 });
